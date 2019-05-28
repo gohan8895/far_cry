@@ -13,7 +13,11 @@ def parse_arguments():
 
 
 def read_log_file(log_file_pathname):
-	return os.path.getsize(log_file_pathname)
+	try:
+		with open(log_file_pathname, 'r') as file_log:
+			return file_log.read()
+	except OSError:
+		print('Invalid input')
 
 
 
@@ -22,13 +26,9 @@ def main():
 	if argument.log and not os.path.isfile(argument.log):
 		print('No fucking file homie')
 		exit(1)
-	file = argument.log
-	print(type(file), file)
-	# with open(file, 'r') as file_log:
-	# 	lines = file_log.readlines()
-	# for x in lines:
-	# 	print(x[:-1])
-	print(read_log_file(file))
+	file_log = argument.log
+	print(len(read_log_file(file_log)))
+
 
 if __name__ == '__main__':
 	main()
