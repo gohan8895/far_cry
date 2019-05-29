@@ -42,6 +42,17 @@ def create_console_variables_dict(log_data):
 	return console_variables_dict
 
 
+def parse_session_mode_and_map(log_data):
+	log_lines = log_data.split('\n')
+	for line in log_lines:
+		if 'Loading level Levels' in line:
+			mode, map = line.split('/')[1].split(',')[1].split(' ')[2], line.split('/')[1].split(',')[0]
+			return (mode, map)
+
+def parse_frags(log_data):
+	log_lines = log_data.split('\n')
+	pass
+
 def main():
 	argument = parse_arguments()
 	if argument.log and not os.path.isfile(argument.log):
@@ -57,8 +68,9 @@ def main():
 	# print(log_start_time)
 	# print(log_start_time.isoformat())
 	console_dict = create_console_variables_dict(log_data)
-	for x, y in console_dict.items():
-		print(x, y)
+	# for x, y in console_dict.items():
+	# 	print(x, y)
+	print(parse_session_mode_and_map(log_data))
 
 
 if __name__ == '__main__':
