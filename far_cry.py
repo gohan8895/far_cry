@@ -51,8 +51,6 @@ def parse_session_mode_and_map(log_data):
 
 def parse_frags(log_data):
 	'''
-	(frag_time, killer_name, victim_name, weapon_code)
-	(frag_time, killer_name)
 	list of tuples of strings
 	'''
 	log_lines = log_data.split('\n')
@@ -75,6 +73,11 @@ def parse_frags(log_data):
 	return list_frags
 
 
+def prettify_frags(frags):
+	for frag in frags:
+		pass
+	pass
+
 
 def main():
 	argument = parse_arguments()
@@ -96,9 +99,9 @@ def main():
 	# for x, y in console_dict.items():
 	# 	print(x, y)
 	# print(parse_session_mode_and_map(log_data))
-	list_frags = parse_frags(log_data)
-	for x in list_frags:
-		print(x)
+	frags = parse_frags(log_data)
+	# for x in list_frags:
+	# 	print(x)
 
 
 
