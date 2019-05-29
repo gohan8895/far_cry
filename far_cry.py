@@ -94,6 +94,7 @@ def main():
 	# 	print(x, y)
 	print(parse_session_mode_and_map(log_data))
 	list_frags = parse_frags(log_data)
+	
 
 
 if __name__ == '__main__':
