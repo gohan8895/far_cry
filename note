@@ -1,0 +1,12 @@
+m = re.match(r"(?P<first_name>\w+) (?P<last_name>\w+)", "Malcolm Reynolds")
+<MM:SS:> <Lua> killer_username killed victim_username with weapon_code
+<27:07> <Lua> theprophete killed lamonthe with Rocket
+
+
+<MM:SS:> <Lua> killer_username killed itself
+(frag_time, killer_name)
+
+
+
+(frag_time, killer_name, victim_name, weapon_code)
+<MM:SS:> <Lua> killer_username killed victim_username with weapon_code
