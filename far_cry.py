@@ -2,7 +2,7 @@
 
 import argparse
 import os
-
+import datetime
 
 
 def parse_arguments():
@@ -20,6 +20,17 @@ def read_log_file(log_file_pathname):
 		print('Invalid input')
 
 
+def parse_log_start_time(log_data):
+	log_lines = log_data.split('\n')
+	time_format = '%A, %B %d, %Y %X'
+	for line in log_lines:
+		if 'Log Started at' in line:
+			time = line.split(' ',3)[3]			
+			time_object = datetime.datetime.strptime(time, time_format)
+		elif 'g_timezone' in line:
+			time_zone = line.split(',')[1][:-1]
+	return time_object.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=int(time_zone))))
+
 
 def main():
 	argument = parse_arguments()
@@ -27,7 +38,13 @@ def main():
 		print('No fucking file homie')
 		exit(1)
 	file_log = argument.log
-	print(len(read_log_file(file_log)))
+	log_data = read_log_file(file_log)
+	# print(len(log_data))
+	log_lines = log_data.split('\n')
+	# for x in log_lines:
+	# 	print(x)
+	log_start_time = parse_log_start_time(log_data)
+	print(log_start_time.isoformat())
 
 
 if __name__ == '__main__':
