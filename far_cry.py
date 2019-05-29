@@ -25,11 +25,21 @@ def parse_log_start_time(log_data):
 	time_format = '%A, %B %d, %Y %X'
 	for line in log_lines:
 		if 'Log Started at' in line:
-			time = line.split(' ',3)[3]			
-			time_object = datetime.datetime.strptime(time, time_format)
+			time_string = line.split(' ',3)[3]			
+			time_object = datetime.datetime.strptime(time_string, time_format)
 		elif 'g_timezone' in line:
-			time_zone = line.split(',')[1][:-1]
-	return time_object.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=int(time_zone))))
+			time_zone = int(line.split(',')[1][:-1])
+	return time_object.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=time_zone)))
+
+
+def create_console_variables_dict(log_data):
+	console_variables_dict = dict()
+	log_lines = log_data.split('\n')
+	for line in log_lines:
+		if 'cvar' in line:
+			key, value = line.split('(')[1].split(',')[0], line.split('(')[1].split(',')[1][:-1]
+			console_variables_dict[key] = [value]
+	return console_variables_dict
 
 
 def main():
@@ -44,7 +54,11 @@ def main():
 	# for x in log_lines:
 	# 	print(x)
 	log_start_time = parse_log_start_time(log_data)
-	print(log_start_time.isoformat())
+	# print(log_start_time)
+	# print(log_start_time.isoformat())
+	console_dict = create_console_variables_dict(log_data)
+	for x, y in console_dict.items():
+		print(x, y)
 
 
 if __name__ == '__main__':
