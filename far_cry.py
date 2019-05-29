@@ -57,14 +57,17 @@ def parse_frags(log_data):
 	'''
 	log_lines = log_data.split('\n')
 	list_frags = list()
+	start_time = parse_log_start_time(log_data)
 	for line in log_lines:
 		if 'killed' in line:
 			if len(line.split(' ')) == 5:
-				frag_time = line.split(' ')[0][1:6]
+				delta = datetime.timedelta(hours=int(line.split(' ')[0][1:6].split(':')[0]), minutes=int(line.split(' ')[0][1:6].split(':')[1]))
+				frag_time = start_time + delta
 				killer_name = line.split(' ')[2]
 				list_frags.append((frag_time, killer_name))
 			elif len(line.split(' ')) == 7:
-				frag_time = line.split(' ')[0][1:6]
+				delta = datetime.timedelta(hours=int(line.split(' ')[0][1:6].split(':')[0]), minutes=int(line.split(' ')[0][1:6].split(':')[1]))
+				frag_time = start_time + delta
 				killer_name = line.split(' ')[2]
 				victim_name = line.split(' ')[4]
 				weapon_code = line.split(' ')[6]
@@ -94,7 +97,9 @@ def main():
 	# 	print(x, y)
 	# print(parse_session_mode_and_map(log_data))
 	list_frags = parse_frags(log_data)
-	
+	for x in list_frags:
+		print(x)
+
 
 
 if __name__ == '__main__':
