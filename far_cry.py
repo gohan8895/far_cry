@@ -81,18 +81,18 @@ def main():
 	file_log = argument.log
 	log_data = read_log_file(file_log)
 	# print(log_data)
-	print(len(log_data))
+	# print(len(log_data))
 	log_lines = log_data.split('\n')
 	# for x in log_lines:
 	# 	print(x)
 	log_start_time = parse_log_start_time(log_data)
 	# print(log_start_time)
-	print(log_start_time)
-	print(log_start_time.isoformat())
+	# print(log_start_time)
+	# print(log_start_time.isoformat())
 	console_dict = create_console_variables_dict(log_data)
 	# for x, y in console_dict.items():
 	# 	print(x, y)
-	print(parse_session_mode_and_map(log_data))
+	# print(parse_session_mode_and_map(log_data))
 	list_frags = parse_frags(log_data)
 	
 
