@@ -4,6 +4,7 @@ import argparse
 import os
 import datetime
 import re
+import csv
 
 def parse_arguments():
     parser =     argparse.ArgumentParser()
@@ -131,12 +132,23 @@ def parse_game_session_start_and_end_times(log_data):
     return start_time_obj, end_time_obj
 
 
+
+def write_frag_csv_file(log_file_pathname, frags):
+    try:
+        with open(log_file_pathname, 'w+', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerows(frags)
+    except OSError:
+        pass
+
+
 def main():
     argument = parse_arguments()
     if argument.log and not os.path.isfile(argument.log):
         print('File not found')
         exit(1)
     file_log = argument.log
+    basename_file_path = os.path.basename(file_log)
     log_data = read_log_file(file_log)
     # print(log_data)
     # print(len(log_data))
@@ -155,8 +167,11 @@ def main():
     # for x in frags:
     #     print(x)
     prettified_frags = prettify_frags(frags)
-    for x in prettified_frags:
-        print(x)
+    # for x in prettified_frags:
+    #     print(x)
+    # print('./' + root_file_path[:-4] + '.csv')
+    write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
+
 
 
 if __name__ == '__main__':
