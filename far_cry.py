@@ -3,7 +3,7 @@
 import argparse
 import os
 import datetime
-from re import search
+import re
 
 def parse_arguments():
     parser =     argparse.ArgumentParser()
@@ -131,18 +131,6 @@ def parse_game_session_start_and_end_times(log_data):
     return start_time_obj, end_time_obj
 
 
-def write_frag_csv_file(log_file_pathname, frags):
-	'''
-	copied
-	'''
-    try:
-        with open(log_file_pathname, 'w+', newline='') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerows(frags)
-    except OSError:
-        pass
-
-
 def main():
     argument = parse_arguments()
     if argument.log and not os.path.isfile(argument.log):
@@ -164,12 +152,11 @@ def main():
     #     print(x, y)
     # print(parse_session_mode_and_map(log_data))
     frags = parse_frags(log_data)
-    # for x in list_frags:
+    # for x in frags:
     #     print(x)
     prettified_frags = prettify_frags(frags)
-    # for x in prettified_frags:
-    #     print(x)
-    write_frag_csv_file(file_log, frags)
+    for x in prettified_frags:
+        print(x)
 
 
 if __name__ == '__main__':
