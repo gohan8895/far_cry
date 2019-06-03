@@ -170,7 +170,7 @@ def main():
     # for x in prettified_frags:
     #     print(x)
     # print('./' + root_file_path[:-4] + '.csv')
-    write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
+    # write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
 
 
 
