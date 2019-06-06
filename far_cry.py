@@ -5,6 +5,7 @@ import os
 import datetime
 from re import search, findall
 import csv
+import sqlite3
 
 def parse_arguments():
     parser =     argparse.ArgumentParser()
@@ -187,29 +188,19 @@ def main():
     file_log = argument.log
     basename_file_path = os.path.basename(file_log)
     log_data = read_log_file(file_log)
-    # print(log_data)
-    # print(len(log_data))
-    log_lines = log_data.split('\n')
-    # for x in log_lines:
-    #     print(x)
     log_start_time = parse_log_start_time(log_data)
-    # print(log_start_time)
-    # print(log_start_time)
-    # print(log_start_time.isoformat())
     console_dict = create_console_variables_dict(log_data)
-    # for x, y in console_dict.items():
-    #     print(x, y)
-    # print(parse_session_mode_and_map(log_data))
+    game_mode, map_name = parse_session_mode_and_map(log_data)
     frags = parse_frags(log_data)
     # for x in frags:
     #     print(x)
     prettified_frags = prettify_frags(frags)
     # for x in prettified_frags:
     #     print(x)
-    # print('./' + root_file_path[:-4] + '.csv')
     write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
     end_time, start_time = parse_game_session_start_and_end_times(log_data)
-    print(end_time, start_time)
+    # print(end_time, start_time)
+    print(insert_match_to_sqlite('khoc_xa.db', start_time, end_time, game_mode, map_name, frags))
 
 
 
