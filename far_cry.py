@@ -3,7 +3,7 @@
 import argparse
 import os
 import datetime
-import re
+from re import search, findall
 import csv
 
 def parse_arguments():
@@ -76,7 +76,7 @@ def parse_frags(log_data):
 
 def get_weapon_emoji(weapon_code):
     '''
-    copied
+    
     '''
     weapon_emoji_dict = {
                         ('Vehicle'): '🚙',
@@ -116,16 +116,26 @@ def prettify_frags(frags):
     return prettified_frags
 
 
+def get_frag_time_obj(log_data, frag_time):
+    start_time = parse_log_start_time(log_data)
+    frag_minute = int(frag_time.split(':')[0])
+    frag_second = int(frag_time.split(':')[1])
+    frag_time_obj = start_time.replace(minute=frag_minute,
+                                       second=frag_second)
+    if frag_minute < start_time.minute:
+        frag_time_obj += timedelta(hours=1)
+    return frag_time_obj
+
+
 def parse_game_session_start_and_end_times(log_data):
-    '''
-    copied
-    '''
-    end_time_string = search(r'<([0-5]\d:[0-5]\d)> == Statistics ',
-                             log_data).group(1)
-    if end_time_string:  # ERROR
-        end_time_obj = get_frag_time_obj(log_data, end_time_string)
-    else:  # Error manage
-        print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh')
+    try:
+        end_time_string = search(r'<([0-5]\d:[0-5]\d)> == Statistics ',
+                                 log_data).group(1)
+    except AttributeError:
+        end_time_string = search(
+            r'<([0-5]\d:[0-5]\d)> ERROR: .* ERROR File: .* Function: .*',
+            log_data).group(1)
+    end_time_obj = get_frag_time_obj(log_data, end_time_string)
     start_time_string = search(r'<([0-5]\d:[0-5]\d)>  Level .* seconds',
                                log_data).group(1)
     start_time_obj = get_frag_time_obj(log_data, start_time_string)
@@ -140,6 +150,33 @@ def write_frag_csv_file(log_file_pathname, frags):
             writer.writerows(frags)
     except OSError:
         pass
+
+
+def insert_match_to_sqlite(file_pathname, start_time, end_time, game_mode,
+                           map_name, frags):
+    def insert_frags_to_sqlite(connection, match_id, frags):
+        # cur = connection.cursor
+        for frag in frags:
+            if len(frag) == 4:
+                new_frag = (match_id, frag[0].isoformat(), frag[1], frag[2], frag[3])
+                connection.execute("insert into match_frag\
+                             values (?, ?, ?, ?, ?)", new_frag)
+            elif len(frag) == 2:
+                new_frag = (match_id, frag[0].isoformat(), frag[1])
+                connection.execute("insert into match_frag(match_id, frag_time,\
+                                    killer_name) values (?, ?, ?)", new_frag)
+        connection.commit()
+
+    conn = sqlite3.connect(file_pathname)
+    cur = conn.cursor()
+    cur.execute("insert into match(start_time, end_time,\
+                 game_mode, map_name) values (?, ?, ?, ?)",
+                (start_time.isoformat(), end_time.isoformat(), game_mode, map_name))
+    conn.commit()
+    last_row_id = cur.lastrowid
+    insert_frags_to_sqlite(conn, last_row_id, frags)
+    conn.close()
+    return last_row_id
 
 
 def main():
@@ -170,7 +207,9 @@ def main():
     # for x in prettified_frags:
     #     print(x)
     # print('./' + root_file_path[:-4] + '.csv')
-    # write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
+    write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
+    end_time, start_time = parse_game_session_start_and_end_times(log_data)
+    print(end_time, start_time)
 
 
 
