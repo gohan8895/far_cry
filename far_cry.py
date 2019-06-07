@@ -298,11 +298,11 @@ def main():
     prettified_frags = prettify_frags(frags)
     # for x in prettified_frags:
     #     print(x)
-    # write_frag_csv_file('./' + basename_file_path[:-4] + '.csv', frags)
+    write_frag_csv_file('./' + basename_file_path.split('.')[0] + '.csv', frags)
     end_time, start_time = parse_game_session_start_and_end_times(log_data)
     print(log_start_time)
     print(end_time, start_time)
-    # print(insert_match_to_sqlite('khoc_xa.db', start_time, end_time,
+    # print(insert_match_to_sqlite('far_cry.db', start_time, end_time,
     #                              game_mode, map_name, frags))
 
 
