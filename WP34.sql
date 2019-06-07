@@ -1,0 +1,1 @@
+SELECT count(killer_name)  AS suicide_count  FROM match_frag  where victim_name IS NULL;

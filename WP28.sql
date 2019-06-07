@@ -1,1 +1,1 @@
-select match_id, game_mode, map_name from match;
+SELECT match_id, game_mode, map_name FROM match;

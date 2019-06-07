@@ -1,0 +1,1 @@
+SELECT COUNT(match_id)  AS 'COUNT(*)' FROM match;

@@ -1,0 +1,1 @@
+SELECT count(killer_name)  AS kill_count  FROM match_frag  where victim_name IS NOT NULL;

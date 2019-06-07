@@ -1,1 +1,1 @@
-select * from match;
+SELECT * FROM match;

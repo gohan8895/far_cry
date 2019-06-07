@@ -1,1 +1,1 @@
-select distinct killer_name from match_frag;
+SELECT DISTINCT killer_name FROM match_frag;
