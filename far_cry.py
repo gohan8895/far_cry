@@ -302,8 +302,8 @@ def main():
     end_time, start_time = parse_game_session_start_and_end_times(log_data)
     print(log_start_time)
     print(end_time, start_time)
-    # print(insert_match_to_sqlite('far_cry.db', start_time, end_time,
-    #                              game_mode, map_name, frags))
+    print(insert_match_to_sqlite('far_cry.db', start_time, end_time,
+                                 game_mode, map_name, frags))
 
 
 if __name__ == '__main__':
